@@ -29,6 +29,6 @@ class OrderDAO implements OrderRepositoryPort {
     public Optional<Order> findById(final UUID uuid) {
         return orderEntityRepository
                 .findById(uuid)
-                .map(OrderEntity::toDomain);
+                .map(orderMapper::toDomain);
     }
 }

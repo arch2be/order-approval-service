@@ -17,7 +17,7 @@ class OnNewOrderHandler implements OnNewOrderHandlerPort {
 
     @Override
     public void notify(final Order order, final String email) {
-        emailSender.send(prepareOrderMessage(order, email));
+        //emailSender.send(prepareOrderMessage(order, email));
     }
 
     private SimpleMailMessage prepareOrderMessage(final Order order, final String email) {
