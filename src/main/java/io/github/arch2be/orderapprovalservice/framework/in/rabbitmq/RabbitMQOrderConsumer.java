@@ -6,20 +6,21 @@ import io.github.arch2be.orderapprovalservice.application.port.out.FetchAgentEma
 import io.github.arch2be.orderapprovalservice.application.port.out.OnNewOrderHandlerPort;
 import io.github.arch2be.orderapprovalservice.application.port.out.OrderRepositoryPort;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 
 @Component
-class OrderConsumer {
+class RabbitMQOrderConsumer {
     private final OnNewOrderEventUseCase onNewOrderEventUseCase;
 
-    OrderConsumer(final OrderRepositoryPort orderRepositoryPort,
-                  final OnNewOrderHandlerPort onNewOrderHandlerPort,
-                  final FetchAgentEmailPort fetchAgentEmailPort) {
+    RabbitMQOrderConsumer(final OrderRepositoryPort orderRepositoryPort,
+                          final OnNewOrderHandlerPort onNewOrderHandlerPort,
+                          final FetchAgentEmailPort fetchAgentEmailPort) {
         this.onNewOrderEventUseCase = new OnNewOrderEventUseCase(orderRepositoryPort, onNewOrderHandlerPort, fetchAgentEmailPort);
     }
 
     @RabbitListener(queues = "${new-orders-queue}")
-    void consume(Order order) {
+    void consume(@Payload Order order) {
         onNewOrderEventUseCase.process(order);
     }
 }

@@ -6,12 +6,12 @@ import io.github.arch2be.orderapprovalservice.application.port.out.FetchAgentEma
 import io.github.arch2be.orderapprovalservice.application.port.out.OrderRepositoryPort;
 import io.github.arch2be.orderapprovalservice.application.port.out.OnNewOrderHandlerPort;
 
-public class OrderCreateUseCase {
+public class OnNewOrderEventUseCase {
     private final OrderRepositoryPort orderRepositoryPort;
     private final OnNewOrderHandlerPort onNewOrderHandlerPort;
     private final FetchAgentEmailPort fetchAgentEmailPort;
 
-    public OrderCreateUseCase(final OrderRepositoryPort orderRepositoryPort, final OnNewOrderHandlerPort onNewOrderHandlerPort, final FetchAgentEmailPort fetchAgentEmailPort) {
+    public OnNewOrderEventUseCase(final OrderRepositoryPort orderRepositoryPort, final OnNewOrderHandlerPort onNewOrderHandlerPort, final FetchAgentEmailPort fetchAgentEmailPort) {
         this.orderRepositoryPort = orderRepositoryPort;
         this.onNewOrderHandlerPort = onNewOrderHandlerPort;
         this.fetchAgentEmailPort = fetchAgentEmailPort;

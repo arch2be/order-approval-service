@@ -1,42 +1,52 @@
-package io.github.arch2be.orderapprovalservice.framework.in.kafka;
+package io.github.arch2be.orderapprovalservice.framework.in.rabbitmq;
 
-import io.github.arch2be.orderapprovalservice.application.domain.model.Order;
-import org.apache.kafka.clients.consumer.ConsumerConfig;
-import org.apache.kafka.common.serialization.StringDeserializer;
+import org.springframework.amqp.core.Binding;
+import org.springframework.amqp.core.BindingBuilder;
+import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.core.TopicExchange;
+import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.kafka.annotation.EnableKafka;
-import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
-import org.springframework.kafka.core.ConsumerFactory;
-import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
-import org.springframework.kafka.support.serializer.JsonDeserializer;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
 
-@EnableKafka
 @Configuration
-class KafkaConfiguration {
+class RabbitMQConfiguration {
+    private final CachingConnectionFactory connectionFactory;
 
-    private String bootstrapAddress = "test";
-    private String groupId = "test";
+    @Value("${new-orders-queue}")
+    private String topicName;
 
-    @Bean
-    ConsumerFactory<String, Order> consumerFactory() {
-        Map<String, Object> props = new HashMap<>();
-        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
-        props.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
-        return new DefaultKafkaConsumerFactory<>(
-                props,
-                new StringDeserializer(),
-                new JsonDeserializer<>(Order.class));
+    RabbitMQConfiguration(final CachingConnectionFactory connectionFactory) {
+        this.connectionFactory = connectionFactory;
     }
 
     @Bean
-    ConcurrentKafkaListenerContainerFactory<String, Order> kafkaListenerContainerFactory() {
-        ConcurrentKafkaListenerContainerFactory<String, Order> factory = new ConcurrentKafkaListenerContainerFactory<>();
-        factory.setConsumerFactory(consumerFactory());
-        return factory;
+    Queue newOrderEventQueue() {
+        return new Queue(topicName, false);
+    }
+
+    @Bean
+    TopicExchange exchange() {
+        return new TopicExchange(topicName + "-exchange");
+    }
+
+    @Bean
+    Binding newOrderBinding(Queue orderEventQueue, TopicExchange exchange) {
+        return BindingBuilder.bind(orderEventQueue).to(exchange).with("order");
+    }
+
+    @Bean
+    Jackson2JsonMessageConverter converter() {
+        return new Jackson2JsonMessageConverter();
+    }
+
+    @Bean
+    RabbitTemplate rabbitTemplate(Jackson2JsonMessageConverter converter) {
+        RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
+        rabbitTemplate.setMessageConverter(converter);
+        return rabbitTemplate;
     }
 }

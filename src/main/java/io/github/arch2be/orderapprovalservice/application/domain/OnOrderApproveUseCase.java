@@ -8,12 +8,12 @@ import io.github.arch2be.orderapprovalservice.application.port.out.OrderReposito
 import java.util.Optional;
 import java.util.UUID;
 
-public class OrderApproveUseCase {
+public class OnOrderApproveUseCase {
     private final OrderRepositoryPort orderRepositoryPort;
     private final OnApproveOrderHandlerPort onApproveOrderHandlerPort;
 
-    public OrderApproveUseCase(final OrderRepositoryPort orderRepositoryPort,
-                               final OnApproveOrderHandlerPort onApproveOrderHandlerPort) {
+    public OnOrderApproveUseCase(final OrderRepositoryPort orderRepositoryPort,
+                                 final OnApproveOrderHandlerPort onApproveOrderHandlerPort) {
         this.orderRepositoryPort = orderRepositoryPort;
         this.onApproveOrderHandlerPort = onApproveOrderHandlerPort;
     }
