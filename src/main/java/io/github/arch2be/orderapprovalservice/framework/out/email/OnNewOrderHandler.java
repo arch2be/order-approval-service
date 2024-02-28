@@ -2,6 +2,8 @@ package io.github.arch2be.orderapprovalservice.framework.out.email;
 
 import io.github.arch2be.orderapprovalservice.application.domain.model.Order;
 import io.github.arch2be.orderapprovalservice.application.port.out.OnNewOrderHandlerPort;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
@@ -9,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 class OnNewOrderHandler implements OnNewOrderHandlerPort {
+    private static final Logger log = LoggerFactory.getLogger(OnNewOrderHandler.class);
     private final JavaMailSender emailSender;
 
     OnNewOrderHandler(final JavaMailSender emailSender) {
@@ -17,6 +20,7 @@ class OnNewOrderHandler implements OnNewOrderHandlerPort {
 
     @Override
     public void notify(final Order order, final String email) {
+        log.info("Send email on address: " + email + " with new order to approve with uuid: " + order.getUuid().toString());
         //emailSender.send(prepareOrderMessage(order, email));
     }
 

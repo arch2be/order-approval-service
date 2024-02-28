@@ -23,6 +23,8 @@ dependencies {
     implementation group: 'com.h2database', name: 'h2', version: '2.2.224'
     implementation group: 'org.springframework.amqp', name: 'spring-rabbit', version: '3.1.2'
     implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.16.1'
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-config-client', version: '4.1.0'
+    implementation group: 'io.github.resilience4j', name: 'resilience4j-spring-boot2', version: '2.2.0'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'

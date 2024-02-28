@@ -2,6 +2,7 @@ package io.github.arch2be.orderapprovalservice.application.domain;
 
 
 import io.github.arch2be.orderapprovalservice.application.domain.model.Order;
+import io.github.arch2be.orderapprovalservice.application.domain.model.exception.OrderNotFoundDomainException;
 import io.github.arch2be.orderapprovalservice.application.port.out.OnApproveOrderHandlerPort;
 import io.github.arch2be.orderapprovalservice.application.port.out.OrderRepositoryPort;
 
@@ -28,6 +29,8 @@ public class OnOrderApproveUseCase {
 
             final Order approvedOrder = orderRepositoryPort.save(order);
             onApproveOrderHandlerPort.handle(approvedOrder);
+        } else {
+            throw new OrderNotFoundDomainException("Order with uuid: " + uuid.toString() + " not exists");
         }
     }
 }

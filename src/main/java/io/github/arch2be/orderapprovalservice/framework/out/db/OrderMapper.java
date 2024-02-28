@@ -17,6 +17,7 @@ class OrderMapper {
 
     OrderEntity toEntity(Order order) {
         return new OrderEntity(
+                order.getUuid(),
                 toCustomerDetailsEntity(order.getCustomerDetails()),
                 toProductEntitySet(order.getProductToInstall()),
                 order.getStatus());
