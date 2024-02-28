@@ -9,15 +9,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.UUID;
 
 @RestController
-@RequestMapping(value = "/order")
+@RequestMapping(value = "/api/v1/order")
 class OrderApprovalController {
     private static final Logger log = LoggerFactory.getLogger(OrderApprovalController.class);
     private final OnOrderApproveUseCase onOrderApproveUseCase;
@@ -27,7 +27,7 @@ class OrderApprovalController {
         this.onOrderApproveUseCase = new OnOrderApproveUseCase(orderRepositoryPort, onApproveOrderHandlerPort);
     }
 
-    @GetMapping(value = "/{orderId}/approve")
+    @PostMapping(value = "/{orderId}/approve")
     void approve(@PathVariable("orderId") UUID orderId) {
         log.info("Start process for approve order with uuid: " + orderId.toString());
         onOrderApproveUseCase.process(orderId);

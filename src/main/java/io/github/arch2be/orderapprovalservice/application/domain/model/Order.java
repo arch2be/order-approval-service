@@ -1,5 +1,8 @@
 package io.github.arch2be.orderapprovalservice.application.domain.model;
 
+import io.github.arch2be.orderapprovalservice.application.domain.model.exception.OrderDomainException;
+
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
@@ -14,6 +17,13 @@ public class Order {
         this.uuid = uuid;
         this.customerDetails = customerDetails;
         this.productToInstall = productToInstall;
+        validate();
+    }
+
+    public void validate() {
+        if (Objects.isNull(productToInstall) || productToInstall.isEmpty()) {
+            throw new OrderDomainException("ProductToInstall must be greater than 0");
+        }
     }
 
     public CustomerDetails getCustomerDetails() {
