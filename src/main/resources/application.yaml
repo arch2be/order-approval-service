@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: default
+    active: dev
   config:
     import: optional:configserver:http://user:user@order-config-server:8888
   cloud:
